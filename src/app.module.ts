@@ -5,6 +5,7 @@ import databaseConfig from './database/database.config';
 import { DatabaseModule } from './database/database.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { join } from 'path';
       envFilePath: '.env',
     }),
     DatabaseModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
