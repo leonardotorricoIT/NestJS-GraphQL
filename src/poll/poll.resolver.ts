@@ -1,35 +1,24 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { PollService } from './poll.service';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { Poll } from './entities/poll.entity';
+import { PollsService } from './poll.service';
 import { CreatePollInput } from './dto/create-poll.input';
-import { UpdatePollInput } from './dto/update-poll.input';
 
 @Resolver(() => Poll)
-export class PollResolver {
-  constructor(private readonly pollService: PollService) {}
+export class PollsResolver {
+  constructor(private readonly pollsService: PollsService) {}
 
-  @Mutation(() => Poll)
-  createPoll(@Args('createPollInput') createPollInput: CreatePollInput) {
-    return this.pollService.create(createPollInput);
-  }
-
-  @Query(() => [Poll], { name: 'poll' })
-  findAll() {
-    return this.pollService.findAll();
+  @Query(() => [Poll], { name: 'polls' })
+  async getAllPolls() {
+    return this.pollsService.findAll();
   }
 
   @Query(() => Poll, { name: 'poll' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.pollService.findOne(id);
+  async getPoll(@Args('id', { type: () => ID }) id: number) {
+    return this.pollsService.findOne(id);
   }
 
   @Mutation(() => Poll)
-  updatePoll(@Args('updatePollInput') updatePollInput: UpdatePollInput) {
-    return this.pollService.update(updatePollInput.id, updatePollInput);
-  }
-
-  @Mutation(() => Poll)
-  removePoll(@Args('id', { type: () => Int }) id: number) {
-    return this.pollService.remove(id);
+  async createPoll(@Args('input') input: CreatePollInput) {
+    return this.pollsService.create(input);
   }
 }

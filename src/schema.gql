@@ -31,14 +31,12 @@ scalar DateTime
 
 type Mutation {
   createOption(createOptionInput: CreateOptionInput!): Option!
-  createPoll(createPollInput: CreatePollInput!): Poll!
+  createPoll(input: CreatePollInput!): Poll!
   createUser(input: CreateUserInput!): User!
   createVote(createVoteInput: CreateVoteInput!): Vote!
   removeOption(id: Int!): Option!
-  removePoll(id: Int!): Poll!
   removeVote(id: Int!): Vote!
   updateOption(updateOptionInput: UpdateOptionInput!): Option!
-  updatePoll(updatePollInput: UpdatePollInput!): Poll!
   updateVote(updateVoteInput: UpdateVoteInput!): Vote!
 }
 
@@ -60,7 +58,8 @@ type Poll {
 
 type Query {
   option(id: Int!): Option!
-  poll(id: Int!): Poll!
+  poll(id: ID!): Poll!
+  polls: [Poll!]!
   user(id: ID!): User!
   users: [User!]!
   vote(id: Int!): Vote!
@@ -70,14 +69,6 @@ input UpdateOptionInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
-}
-
-input UpdatePollInput {
-  description: String
-  id: Int!
-  options: [String!]
-  title: String
-  userId: ID
 }
 
 input UpdateVoteInput {
