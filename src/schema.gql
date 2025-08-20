@@ -2,20 +2,80 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateOptionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreatePollInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 input CreateUserInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
+input CreateVoteInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
+  createOption(createOptionInput: CreateOptionInput!): Option!
+  createPoll(createPollInput: CreatePollInput!): Poll!
   createUser(createUserInput: CreateUserInput!): User!
+  createVote(createVoteInput: CreateVoteInput!): Vote!
+  removeOption(id: Int!): Option!
+  removePoll(id: Int!): Poll!
   removeUser(id: Int!): User!
+  removeVote(id: Int!): Vote!
+  updateOption(updateOptionInput: UpdateOptionInput!): Option!
+  updatePoll(updatePollInput: UpdatePollInput!): Poll!
   updateUser(updateUserInput: UpdateUserInput!): User!
+  updateVote(updateVoteInput: UpdateVoteInput!): Vote!
+}
+
+type Option {
+  id: ID!
+  poll: Poll!
+  text: String!
+  votes: [Vote!]!
+}
+
+type Poll {
+  createdAt: DateTime!
+  createdBy: User!
+  description: String
+  id: ID!
+  options: [Option!]!
+  title: String!
 }
 
 type Query {
+  option(id: Int!): Option!
+  poll(id: Int!): Poll!
   user(id: Int!): User!
   users: [User!]!
+  vote(id: Int!): Vote!
+}
+
+input UpdateOptionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdatePollInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input UpdateUserInput {
@@ -24,7 +84,24 @@ input UpdateUserInput {
   id: Int!
 }
 
-type User {
+input UpdateVoteInput {
   """Example field (placeholder)"""
-  exampleField: Int!
+  exampleField: Int
+  id: Int!
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  polls: [Poll!]!
+  username: String!
+  votes: [Vote!]!
+}
+
+type Vote {
+  createdAt: DateTime!
+  id: ID!
+  option: Option!
+  user: User!
 }
