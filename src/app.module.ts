@@ -6,6 +6,9 @@ import { DatabaseModule } from './database/database.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
+import { PollModule } from './poll/poll.module';
+import { OptionModule } from './option/option.module';
+import { VoteModule } from './vote/vote.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { UsersModule } from './users/users.module';
     }),
     DatabaseModule,
     UsersModule,
+    PollModule,
+    OptionModule,
+    VoteModule,
   ],
 })
 export class AppModule {}
