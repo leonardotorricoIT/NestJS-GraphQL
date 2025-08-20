@@ -8,18 +8,20 @@ input CreateOptionInput {
 }
 
 input CreatePollInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  description: String
+  options: [String!]!
+  title: String!
+  userId: ID!
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  email: String!
+  username: String!
 }
 
 input CreateVoteInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  optionId: ID!
+  userId: ID!
 }
 
 """
@@ -30,15 +32,13 @@ scalar DateTime
 type Mutation {
   createOption(createOptionInput: CreateOptionInput!): Option!
   createPoll(createPollInput: CreatePollInput!): Poll!
-  createUser(createUserInput: CreateUserInput!): User!
+  createUser(input: CreateUserInput!): User!
   createVote(createVoteInput: CreateVoteInput!): Vote!
   removeOption(id: Int!): Option!
   removePoll(id: Int!): Poll!
-  removeUser(id: Int!): User!
   removeVote(id: Int!): Vote!
   updateOption(updateOptionInput: UpdateOptionInput!): Option!
   updatePoll(updatePollInput: UpdatePollInput!): Poll!
-  updateUser(updateUserInput: UpdateUserInput!): User!
   updateVote(updateVoteInput: UpdateVoteInput!): Vote!
 }
 
@@ -61,7 +61,7 @@ type Poll {
 type Query {
   option(id: Int!): Option!
   poll(id: Int!): Poll!
-  user(id: Int!): User!
+  user(id: ID!): User!
   users: [User!]!
   vote(id: Int!): Vote!
 }
@@ -73,21 +73,17 @@ input UpdateOptionInput {
 }
 
 input UpdatePollInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  description: String
   id: Int!
-}
-
-input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  options: [String!]
+  title: String
+  userId: ID
 }
 
 input UpdateVoteInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
+  optionId: ID
+  userId: ID
 }
 
 type User {
