@@ -18,7 +18,11 @@ import { VoteModule } from './vote/vote.module';
       graphiql: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      installSubscriptionHandlers: true,
+      installSubscriptionHandlers: false,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,

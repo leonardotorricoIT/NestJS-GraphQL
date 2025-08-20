@@ -35,15 +35,12 @@ export class PollsService {
     const user = await this.userRepo.findOne({ where: { id: input.userId } });
     if (!user) throw new BadRequestException('User not found');
 
-    // Crear poll
     const poll = this.pollRepo.create({
       title: input.title,
       description: input.description,
       createdBy: user,
     });
     const savedPoll = await this.pollRepo.save(poll);
-
-    // Crear opciones asociadas
     const options = input.options.map((text) =>
       this.optionRepo.create({ text, poll: savedPoll }),
     );

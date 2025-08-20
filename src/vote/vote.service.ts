@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Vote } from './entities/vote.entity';
 import { CreateVoteInput } from './dto/create-vote.input';
-import { UpdateVoteInput } from './dto/update-vote.input';
+import { Option } from '../option/entities/option.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class VoteService {
-  create(createVoteInput: CreateVoteInput) {
-    return 'This action adds a new vote';
-  }
+  constructor(
+    @InjectRepository(Vote) private voteRepo: Repository<Vote>,
+    @InjectRepository(Option) private optionRepo: Repository<Option>,
+    @InjectRepository(User) private userRepo: Repository<User>,
+  ) {}
 
-  findAll() {
-    return `This action returns all vote`;
-  }
+  async vote(input: CreateVoteInput): Promise<Vote> {
+    const { userId, optionId } = input;
 
-  findOne(id: number) {
-    return `This action returns a #${id} vote`;
-  }
+    const option = await this.optionRepo.findOne({
+      where: { id: optionId },
+      relations: ['poll'],
+    });
+    if (!option) throw new BadRequestException('Option not found');
 
-  update(id: number, updateVoteInput: UpdateVoteInput) {
-    return `This action updates a #${id} vote`;
-  }
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) throw new BadRequestException('User not found');
 
-  remove(id: number) {
-    return `This action removes a #${id} vote`;
+    const existingVote = await this.voteRepo.findOne({
+      where: { user: { id: userId }, option: { poll: { id: option.poll.id } } },
+      relations: ['option', 'user'],
+    });
+
+    if (existingVote) {
+      existingVote.option = option;
+      return this.voteRepo.save(existingVote);
+    }
+
+    const newVote = this.voteRepo.create({
+      user,
+      option,
+    });
+    return this.voteRepo.save(newVote);
   }
 }

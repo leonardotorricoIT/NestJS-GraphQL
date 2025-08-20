@@ -33,11 +33,9 @@ type Mutation {
   createOption(createOptionInput: CreateOptionInput!): Option!
   createPoll(input: CreatePollInput!): Poll!
   createUser(input: CreateUserInput!): User!
-  createVote(createVoteInput: CreateVoteInput!): Vote!
   removeOption(id: Int!): Option!
-  removeVote(id: Int!): Vote!
   updateOption(updateOptionInput: UpdateOptionInput!): Option!
-  updateVote(updateVoteInput: UpdateVoteInput!): Vote!
+  vote(input: CreateVoteInput!): Vote!
 }
 
 type Option {
@@ -62,19 +60,16 @@ type Query {
   polls: [Poll!]!
   user(id: ID!): User!
   users: [User!]!
-  vote(id: Int!): Vote!
+}
+
+type Subscription {
+  onVote(pollId: Float!): String!
 }
 
 input UpdateOptionInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
-}
-
-input UpdateVoteInput {
-  id: Int!
-  optionId: ID
-  userId: ID
 }
 
 type User {
