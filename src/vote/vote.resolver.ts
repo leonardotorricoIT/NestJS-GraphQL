@@ -3,6 +3,7 @@ import { Vote } from './entities/vote.entity';
 import { VoteService } from './vote.service';
 import { CreateVoteInput } from './dto/create-vote.input';
 import { PubSub, PubSubEngine } from 'graphql-subscriptions';
+import { PollUpdate } from 'src/poll/dto/update-poll.input';
 
 const pubSub: PubSubEngine = new PubSub();
 
@@ -14,13 +15,15 @@ export class VotesResolver {
   async vote(@Args('input') input: CreateVoteInput) {
     const vote = await this.votesService.vote(input);
 
-    // Notificar cambios en el poll
-    pubSub.publish('voteAdded', { onVote: vote.option.poll.id });
+    const poll = await this.votesService.getPollResults(vote.option.poll.id);
+
+    await pubSub.publish('voteAdded', { onVote: poll });
+
     return vote;
   }
 
-  @Subscription(() => String, {
-    filter: (payload, variables) => payload.onVote === variables.pollId,
+  @Subscription(() => PollUpdate, {
+    filter: (payload, variables) => payload.onVote.pollId === variables.pollId,
   })
   onVote(@Args('pollId') pollId: number) {
     return pubSub.asyncIterableIterator('voteAdded');

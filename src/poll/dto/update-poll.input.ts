@@ -1,8 +1,22 @@
-import { CreatePollInput } from './create-poll.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
-@InputType()
-export class UpdatePollInput extends PartialType(CreatePollInput) {
+@ObjectType()
+export class OptionResult {
+  @Field(() => ID)
+  optionId: number;
+
+  @Field()
+  text: string;
+
   @Field(() => Int)
-  id: number;
+  votes: number;
+}
+
+@ObjectType()
+export class PollUpdate {
+  @Field(() => ID)
+  pollId: number;
+
+  @Field(() => [OptionResult])
+  options: OptionResult[];
 }

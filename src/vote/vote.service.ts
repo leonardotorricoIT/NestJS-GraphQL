@@ -42,4 +42,19 @@ export class VoteService {
     });
     return this.voteRepo.save(newVote);
   }
+  async getPollResults(pollId: number) {
+    const poll = await this.optionRepo.find({
+      where: { poll: { id: pollId } },
+      relations: ['votes'],
+    });
+
+    return {
+      pollId,
+      options: poll.map((opt) => ({
+        optionId: opt.id,
+        text: opt.text,
+        votes: opt.votes.length,
+      })),
+    };
+  }
 }

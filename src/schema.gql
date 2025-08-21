@@ -45,6 +45,12 @@ type Option {
   votes: [Vote!]!
 }
 
+type OptionResult {
+  optionId: ID!
+  text: String!
+  votes: Int!
+}
+
 type Poll {
   createdAt: DateTime!
   createdBy: User!
@@ -52,6 +58,11 @@ type Poll {
   id: ID!
   options: [Option!]!
   title: String!
+}
+
+type PollUpdate {
+  options: [OptionResult!]!
+  pollId: ID!
 }
 
 type Query {
@@ -63,7 +74,7 @@ type Query {
 }
 
 type Subscription {
-  onVote(pollId: Float!): String!
+  onVote(pollId: Float!): PollUpdate!
 }
 
 input UpdateOptionInput {
