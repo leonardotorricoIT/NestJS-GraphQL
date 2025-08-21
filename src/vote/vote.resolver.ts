@@ -3,7 +3,7 @@ import { Vote } from './entities/vote.entity';
 import { VoteService } from './vote.service';
 import { CreateVoteInput } from './dto/create-vote.input';
 import { PubSub, PubSubEngine } from 'graphql-subscriptions';
-import { PollUpdate } from 'src/poll/dto/update-poll.input';
+import { PollUpdate } from '../poll/dto/update-poll.input';
 
 const pubSub: PubSubEngine = new PubSub();
 
